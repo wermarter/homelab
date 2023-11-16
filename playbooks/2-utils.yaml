@@ -1,0 +1,13 @@
+- name: "Some other tools"
+  hosts: "*"
+  tasks:
+    - name: Install ripgrep
+      become: true
+      ansible.builtin.package:
+        state: present
+        name: ripgrep
+    - name: Install unzip
+      become: true
+      ansible.builtin.package:
+        state: present
+        name: unzip
