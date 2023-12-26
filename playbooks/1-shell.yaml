@@ -26,11 +26,6 @@
         repo: https://github.com/zsh-users/zsh-autosuggestions
         dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
         depth: 1
-    - name: Install zsh-completions plugin # noqa: latest
-      ansible.builtin.git:
-        repo: https://github.com/zsh-users/zsh-completions
-        dest: ~/.oh-my-zsh/custom/plugins/zsh-completions
-        depth: 1
     - name: Install zsh-syntax-highlighting plugin # noqa: latest
       ansible.builtin.git:
         repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
