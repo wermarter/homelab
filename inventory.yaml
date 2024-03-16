@@ -1,0 +1,14 @@
+debian:
+  children:
+    workers:
+    master:
+
+master:
+  hosts:
+    aspire:
+
+workers:
+  hosts:
+    gintoki:
+    kaguya:
+    shinpachi:
