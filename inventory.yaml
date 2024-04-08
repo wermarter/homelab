@@ -1,14 +1,14 @@
-debian:
+ubuntu:
   children:
     workers:
     master:
 
 master:
   hosts:
-    aspire:
+    madao:
 
 workers:
   hosts:
     gintoki:
-    kaguya:
+    kagura:
     shinpachi:

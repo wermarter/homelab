@@ -10,17 +10,14 @@
         autoremove: true
         autoclean: true
 
-    - name: Install Git
+    - name: Install packages
       become: true
       ansible.builtin.package:
-        name: git
+        name: "{{ item.name }}"
         state: present
-
-    - name: Install ZSH
-      become: true
-      ansible.builtin.package:
-        name: zsh
-        state: present
+      with_items:
+        - name: git
+        - name: zsh
 
     - name: Install Oh My Zsh
       ansible.builtin.git:
@@ -61,6 +58,7 @@
         src: .zshrc
         dest: ~/.zshrc
         mode: "0644"
+
     - name: Copy p10k config
       ansible.builtin.copy:
         src: .p10k.zsh

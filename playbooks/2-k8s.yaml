@@ -1,24 +1,26 @@
-- name: "Some other tools"
-  hosts: "*"
+- name: K8s setup
+  hosts: workers
   tasks:
-    - name: Install ripgrep
-      become: true
-      ansible.builtin.package:
-        state: present
-        name: ripgrep
-    - name: Install unzip
-      become: true
-      ansible.builtin.package:
-        state: present
-        name: unzip
     - name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
       become: true
       ansible.builtin.shell: |
         swapoff -a
       changed_when: false
+
     - name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
       become: true
       ansible.builtin.replace:
         path: /etc/fstab
         regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
         replace: '# \1'
+
+    - name: Ensure Python3 are installed
+      become: true
+      ansible.builtin.package:
+        name: python3-pip
+        state: present
+
+    - name: Install netaddr Python library
+      ansible.builtin.pip:
+        name: netaddr
+        state: present
