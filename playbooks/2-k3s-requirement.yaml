@@ -1,4 +1,4 @@
-- name: K8s setup
+- name: K3s requirement
   hosts: workers
   tasks:
     - name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
