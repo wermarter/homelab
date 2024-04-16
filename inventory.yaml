@@ -5,7 +5,7 @@ ubuntu:
 
 master:
   hosts:
-    madao:
+    gintoki:
 
 workers:
   hosts:
