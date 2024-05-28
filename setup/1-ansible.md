@@ -10,31 +10,30 @@ sudo apt install ansible ansible-lint
 
 cd ~/.ssh
 
-ssh-keygen (x4)
+ssh-keygen -f k8s-nodes
+
+config host file /etc/hosts
 
 code ./config
 ```
-Host madao
+Host localhost
   AddKeysToAgent yes
-  IdentityFile ~/.ssh/madao
+  IdentityFile ~/.ssh/k8s-nodes
 
 Host gintoki
-  HostName 192.168.1.11
   AddKeysToAgent yes
-  IdentityFile ~/.ssh/gintoki
+  IdentityFile ~/.ssh/k8s-nodes
 
 Host kagura
-  HostName 192.168.1.12
   AddKeysToAgent yes
-  IdentityFile ~/.ssh/kagura
+  IdentityFile ~/.ssh/k8s-nodes
 
 Host shinpachi
-  HostName 192.168.1.13
   AddKeysToAgent yes
-  IdentityFile ~/.ssh/shinpachi
+  IdentityFile ~/.ssh/k8s-nodes
 ```
 
-ssh-copy-id -i gintoki gintoki
+ssh-copy-id -i k8s-nodes gintoki
 
 ## passwordless sudo
 
@@ -46,5 +45,4 @@ do this for every target
 
 ## test connection
 
-ansible ubuntu -m ping
 ansible workers -b -a "ufw status"

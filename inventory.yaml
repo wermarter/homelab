@@ -1,3 +1,7 @@
+localhost:
+  hosts:
+    localhost:
+
 ubuntu:
   children:
     workers:

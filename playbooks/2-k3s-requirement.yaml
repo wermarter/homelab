@@ -17,7 +17,7 @@
     - name: Ensure Python3 are installed
       become: true
       ansible.builtin.package:
-        name: python3-pip
+        name: python3-full
         state: present
 
     - name: Install netaddr Python library
