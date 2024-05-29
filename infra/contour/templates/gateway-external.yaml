@@ -1,0 +1,51 @@
+# https://projectcontour.io/docs/main/config/api/#projectcontour.io/v1alpha1.ContourDeployment
+kind: ContourDeployment
+apiVersion: projectcontour.io/v1alpha1
+metadata:
+  namespace: projectcontour
+  name: external-contour-params
+spec:
+  envoy:
+    networkPublishing:
+      serviceAnnotations:
+        metallb.universe.tf/loadBalancerIPs: {{ .Values.loadBalancerIP }}
+---
+kind: GatewayClass
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: external-contour
+spec:
+  controllerName: projectcontour.io/gateway-controller
+  parametersRef:
+    kind: ContourDeployment
+    group: projectcontour.io
+    name: external-contour-params
+    namespace: projectcontour
+---
+kind: Gateway
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: external-contour
+  namespace: projectcontour
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-argocd
+spec:
+  gatewayClassName: external-contour
+  listeners:
+    - name: argocd
+      hostname: argocd.haminhchien.id.vn
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+        - name: argocd-tls
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All

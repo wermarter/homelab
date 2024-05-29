@@ -1,0 +1,3 @@
+cert-manager:
+  extraArgs:
+    - --feature-gates=ExperimentalGatewayAPISupport=true
