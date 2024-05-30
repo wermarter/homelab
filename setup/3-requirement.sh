@@ -1,10 +1,9 @@
-ansible-playbook playbooks/2-k3s-requirement.yaml
+ansible-playbook playbooks/2-requirement.yaml
 
 sudo snap install kubectl --classic
 sudo snap install helm --classic
-
 /snap/bin/kubectl completion zsh > ~/.oh-my-zsh/custom/plugins/kubectl.plugin.zsh
 
 git clone https://github.com/techno-tim/k3s-ansible
-cd k3s-ansible && git checkout b3f2a4addca25b12b755c2f89e95b26196f40e0b && cd ..
+cd k3s-ansible && git checkout f50d335451cb186a7f2e8cb8f2e5285b30f66bc0 && cd ..
 mkdir ./k3s-ansible/inventory/my-cluster/

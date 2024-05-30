@@ -27,22 +27,9 @@ apiVersion: gateway.networking.k8s.io/v1
 metadata:
   name: contour-external
   namespace: projectcontour
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
 spec:
   gatewayClassName: contour-external
   listeners:
-    - name: argocd
-      hostname: argocd.haminhchien.id.vn
-      protocol: HTTPS
-      port: 443
-      tls:
-        mode: Terminate
-        certificateRefs:
-        - name: argocd-tls
-      allowedRoutes:
-        namespaces:
-          from: All
     - name: http
       protocol: HTTP
       port: 80

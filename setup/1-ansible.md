@@ -19,21 +19,24 @@ code ./config
 Host localhost
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
-
-Host gintoki
-  AddKeysToAgent yes
-  IdentityFile ~/.ssh/homelab
-
+  
 Host kagura
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
-
+  
 Host shinpachi
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/homelab
+
+Host sadaharu
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
 ```
 
-ssh-copy-id -i homelab gintoki
+ssh-copy-id -i ~/.ssh/homelab localhost
+ssh-copy-id -i ~/.ssh/homelab kagura
+ssh-copy-id -i ~/.ssh/homelab shinpachi
+ssh-copy-id -i ~/.ssh/homelab sadaharu
 
 ## install Ansible
 
@@ -41,8 +44,8 @@ sudo apt-add-repository ppa:ansible/ansible
 
 sudo apt update && sudo apt upgrade -y
 
-sudo apt install ansible ansible-lint
+sudo apt install ansible
 
 ## test connection
 
-ansible workers -b -a "ufw status"
+ansible all -b -a "ufw status"
