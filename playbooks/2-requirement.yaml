@@ -1,5 +1,5 @@
 - name: K3s requirement
-  hosts: workers
+  hosts: all
   tasks:
     - name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
       become: true
@@ -18,9 +18,4 @@
       become: true
       ansible.builtin.package:
         name: python3-full
-        state: present
-
-    - name: Install netaddr Python library
-      ansible.builtin.pip:
-        name: netaddr
         state: present

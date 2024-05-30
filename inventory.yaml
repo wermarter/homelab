@@ -5,14 +5,9 @@ localhost:
 ubuntu:
   children:
     workers:
-    master:
-
-master:
-  hosts:
-    gintoki:
 
 workers:
   hosts:
-    gintoki:
     kagura:
     shinpachi:
+    sadaharu:

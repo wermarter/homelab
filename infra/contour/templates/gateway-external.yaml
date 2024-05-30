@@ -3,7 +3,7 @@ kind: ContourDeployment
 apiVersion: projectcontour.io/v1alpha1
 metadata:
   namespace: projectcontour
-  name: external-contour-params
+  name: contour-external-params
 spec:
   envoy:
     networkPublishing:
@@ -13,24 +13,24 @@ spec:
 kind: GatewayClass
 apiVersion: gateway.networking.k8s.io/v1
 metadata:
-  name: external-contour
+  name: contour-external
 spec:
   controllerName: projectcontour.io/gateway-controller
   parametersRef:
     kind: ContourDeployment
     group: projectcontour.io
-    name: external-contour-params
+    name: contour-external-params
     namespace: projectcontour
 ---
 kind: Gateway
 apiVersion: gateway.networking.k8s.io/v1
 metadata:
-  name: external-contour
+  name: contour-external
   namespace: projectcontour
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-argocd
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
-  gatewayClassName: external-contour
+  gatewayClassName: contour-external
   listeners:
     - name: argocd
       hostname: argocd.haminhchien.id.vn

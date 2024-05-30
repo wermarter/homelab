@@ -5,10 +5,9 @@ metadata:
   namespace: argo
 spec:
   parentRefs:
-    - name: external-contour
+    - kind: Gateway
       namespace: projectcontour
-      kind: Gateway
-      sectionName: argocd
+      name: contour-external
   hostnames:
     - argocd.haminhchien.id.vn
   rules:

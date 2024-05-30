@@ -3,7 +3,7 @@ kind: ContourDeployment
 apiVersion: projectcontour.io/v1alpha1
 metadata:
   namespace: projectcontour
-  name: internal-contour-params
+  name: contour-internal-params
 spec:
   envoy:
     networkPublishing:
@@ -12,22 +12,22 @@ spec:
 kind: GatewayClass
 apiVersion: gateway.networking.k8s.io/v1
 metadata:
-  name: internal-contour
+  name: contour-internal
 spec:
   controllerName: projectcontour.io/gateway-controller
   parametersRef:
     kind: ContourDeployment
     group: projectcontour.io
-    name: internal-contour-params
+    name: contour-internal-params
     namespace: projectcontour
 ---
 kind: Gateway
 apiVersion: gateway.networking.k8s.io/v1
 metadata:
-  name: internal-contour
+  name: contour-internal
   namespace: projectcontour
 spec:
-  gatewayClassName: internal-contour
+  gatewayClassName: contour-internal
   listeners:
     - name: grpc
       protocol: TCP
