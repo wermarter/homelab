@@ -1,5 +1,6 @@
 - name: Longhorn requirement
   hosts: all
+  become: true
   tasks:
     - name: Append blacklist block to /etc/multipath.conf
       blockinfile:

@@ -24,3 +24,4 @@
       ansible.builtin.pip:
         name: netaddr
         state: present
+        break_system_packages: true

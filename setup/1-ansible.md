@@ -17,19 +17,27 @@ config host file /etc/hosts
 code ./config
 
 ```
+Host github.com
+  HostName github.com
+  AddKeysToAgent Yes
+  IdentityFile ~/.ssh/github_wermarter
+
 Host localhost
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
 
-Host kagura
+Host shinpachi
+  HostName 192.168.1.11
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
 
-Host shinpachi
+Host kagura
+  HostName 192.168.1.12
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
 
 Host sadaharu
+  HostName 192.168.1.13
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
 ```
@@ -45,7 +53,7 @@ sudo apt-add-repository ppa:ansible/ansible
 
 sudo apt update && sudo apt upgrade -y
 
-sudo apt install ansible
+sudo apt install -y ansible
 
 ## test connection
 
