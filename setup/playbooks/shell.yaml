@@ -1,5 +1,6 @@
 - name: "Setup shell environment"
   hosts: all
+
   tasks:
     - name: Apt upgrade
       become: true

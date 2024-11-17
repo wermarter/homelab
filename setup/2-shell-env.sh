@@ -1,1 +1,1 @@
-ansible-playbook playbooks/1-shell.yaml
+ansible-playbook playbooks/shell.yaml

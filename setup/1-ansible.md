@@ -15,15 +15,16 @@ ssh-keygen -f homelab
 config host file /etc/hosts
 
 code ./config
+
 ```
 Host localhost
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
-  
+
 Host kagura
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
-  
+
 Host shinpachi
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
