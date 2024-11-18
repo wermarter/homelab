@@ -14,6 +14,8 @@ spec:
     path: charts/prometheus-stack
     repoURL: https://github.com/wermarter/homelab
     targetRevision: main
+  syncOptions:
+    - Replace=true # issue with long annotation size
   syncPolicy:
     automated:
       prune: true
