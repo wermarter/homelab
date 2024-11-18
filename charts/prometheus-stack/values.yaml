@@ -1,0 +1,68 @@
+kube-prometheus-stack:
+  fullnameOverride: prometheus-stack
+
+  alertmanager:
+    fullnameOverride: alertmanager
+
+  grafana:
+    fullnameOverride: grafana
+    replicas: 2
+    defaultDashboardsTimezone: browser
+    admin:
+      existingSecret: grafana-credentials
+      userKey: admin-user
+      passwordKey: admin-password
+    persistence:
+      enabled: true
+      size: 1Gi
+    sidecar:
+      datasources:
+        exemplarTraceIdDestinations:
+          datasourceUid: tempo
+          traceIdLabelName: traceID
+
+  kubeControllerManager:
+    enabled: false
+
+  kubeDns:
+    enabled: false
+
+  kubeEtcd:
+    enabled: false
+
+  kubeScheduler:
+    enabled: false
+
+  kubeProxy:
+    enabled: false
+
+  prometheusOperator:
+    fullnameOverride: prometheus-operator
+
+  prometheus:
+    prometheusSpec:
+      replicas: 1
+      resources:
+        requests:
+          memory: 1Gi
+      scrapeInterval: 60s
+      evaluationInterval: 60s
+      retention: 30d
+      enableFeatures:
+        - exemplar-storage
+      exemplars:
+        maxSize: 1000000
+      # query:
+      #   lookbackDelta: 7d
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            accessModes: ['ReadWriteOnce']
+            resources:
+              requests:
+                storage: 30Gi
+      ruleSelectorNilUsesHelmValues: false
+      serviceMonitorSelectorNilUsesHelmValues: false
+      podMonitorSelectorNilUsesHelmValues: false
+      probeSelectorNilUsesHelmValues: false
+      enableRemoteWriteReceiver: true

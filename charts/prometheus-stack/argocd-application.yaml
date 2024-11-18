@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus-stack
+  namespace: argo
+spec:
+  destination:
+    namespace: prometheus-stack
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: charts/prometheus-stack
+    repoURL: https://github.com/wermarter/homelab
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
