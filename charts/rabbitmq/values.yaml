@@ -1,5 +1,7 @@
 rabbitmq:
   replicaCount: 3
+  persistence:
+    storageClass: none-replicated
   fullnameOverride: rabbitmq
   resourcesPreset: 'none'
   resources:
