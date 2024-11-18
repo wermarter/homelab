@@ -5,6 +5,7 @@ longhorn:
     replicas: 2
   persistence:
     defaultClassReplicaCount: 2
+    defaultDataLocality: best-effort
   csi:
     attacherReplicaCount: 2
     provisionerReplicaCount: 2
