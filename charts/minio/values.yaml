@@ -23,4 +23,9 @@ minio:
       value: http://prometheus-stack-prometheus.prometheus-stack.svc.cluster.local:9090
     - name: MINIO_PROMETHEUS_JOB_ID
       value: minio
-  defaultBuckets: 'loki-chunks, loki-ruler, loki-admin'
+  provisioning:
+    enabled: true
+    buckets:
+      - name: loki-chunks
+      - name: loki-ruler
+      - name: loki-admin
