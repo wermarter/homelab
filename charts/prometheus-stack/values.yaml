@@ -1,6 +1,9 @@
 kube-prometheus-stack:
   fullnameOverride: prometheus-stack
 
+  crds:
+    enabled: true
+
   alertmanager:
     fullnameOverride: alertmanager
 
