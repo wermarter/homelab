@@ -1,0 +1,26 @@
+minio:
+  mode: distributed
+  auth:
+    existingSecret: minio-credentials
+  metrics:
+    serviceMonitor:
+      enabled: true
+      jobLabel: minio
+      namespace: prometheus-stack
+      paths:
+        - /minio/v2/metrics/cluster
+        - /minio/v2/metrics/node
+        - /minio/v2/metrics/bucket
+    prometheusRule:
+      enabled: true
+      namespace: prometheus-stack
+  resourcesPreset: 'none'
+  persistence:
+    size: 20Gi
+    storageClass: non-replicated
+  extraEnvVars:
+    - name: MINIO_PROMETHEUS_URL
+      value: http://prometheus-stack-prometheus.prometheus-stack.svc.cluster.local:9090
+    - name: MINIO_PROMETHEUS_JOB_ID
+      value: minio
+  defaultBuckets: 'loki-chunks, loki-ruler, loki-admin'
