@@ -5,8 +5,8 @@ metadata:
   namespace: argo
 spec:
   parentRefs:
-    - name: contour-external
-      namespace: projectcontour
+    - name: gateway-external
+      namespace: envoy-gateway-system
       kind: Gateway
   hostnames:
     - argocd.haminhchien.id.vn

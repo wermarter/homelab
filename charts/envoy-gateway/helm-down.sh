@@ -3,4 +3,4 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 kubectl=/snap/bin/kubectl
 
-helm upgrade --install -n argo argocd $SCRIPT_DIR --render-subchart-notes
+helm uninstall -n envoy-gateway-system envoy-gateway

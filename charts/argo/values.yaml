@@ -7,5 +7,3 @@ argo-cd:
     enabled: false
   dex:
     enabled: false
-  ingress:
-    enabled: false
