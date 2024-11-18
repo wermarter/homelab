@@ -17,7 +17,7 @@ minio:
   resourcesPreset: 'none'
   persistence:
     size: 20Gi
-    storageClass: non-replicated
+    storageClass: none-replicated
   extraEnvVars:
     - name: MINIO_PROMETHEUS_URL
       value: http://prometheus-stack-prometheus.prometheus-stack.svc.cluster.local:9090
