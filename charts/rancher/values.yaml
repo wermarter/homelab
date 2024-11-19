@@ -1,4 +1,5 @@
 rancher:
+  replicas: 2
   tls: external
   ingress:
     enabled: false
