@@ -14,3 +14,15 @@ spec:
     - backendRefs:
       - name: rancher
         port: 80
+      filters:
+      - type: RequestHeaderModifier
+        requestHeaderModifier:
+          add:
+          - name: "Host"
+            value: "rancher.haminhchien.id.vn"
+          - name: "X-Forwarded-Proto"
+            value: "https"
+          - name: "X-Forwarded-Port"
+            value: "443"
+          - name: "X-Forwarded-For"
+            value: "203.0.113.195"
