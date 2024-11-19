@@ -2,6 +2,9 @@ minio:
   mode: distributed
   auth:
     existingSecret: minio-credentials
+  service:
+    type: 'LoadBalancer'
+    loadBalancerIP: '192.168.1.201'
   metrics:
     serviceMonitor:
       enabled: true
