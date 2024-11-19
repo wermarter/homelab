@@ -1,4 +1,5 @@
 rancher:
+  hostname: rancher.haminhchien.id.vn
   replicas: 2
   tls: external
   ingress:
