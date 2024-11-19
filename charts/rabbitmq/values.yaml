@@ -1,5 +1,6 @@
 rabbitmq:
   replicaCount: 3
+  podManagementPolicy: Parallel
   persistence:
     storageClass: none-replicated
   fullnameOverride: rabbitmq
