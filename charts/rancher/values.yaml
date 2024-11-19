@@ -3,3 +3,5 @@ rancher:
   tls: external
   ingress:
     enabled: false
+  startupProbe:
+    failureThreshold: 30
