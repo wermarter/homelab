@@ -31,4 +31,4 @@ rabbitmq:
   volumePermissions:
     enabled: true
   extraConfiguration: |-
-    mnesia_table_loading_retry_timeout = 120000
+    mnesia_table_loading_retry_timeout = 1200000
