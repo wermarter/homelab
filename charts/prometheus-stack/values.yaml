@@ -2,7 +2,9 @@ kube-prometheus-stack:
   fullnameOverride: prometheus-stack
 
   crds:
-    enabled: true # issue with argoCD sync with long annotations -> set 'true' first times
+    enabled: false 
+    # issue with argoCD sync with long annotations -> set 'true' first times
+    # manual sync UI selecting only out-of-sync resources 
 
   alertmanager:
     fullnameOverride: alertmanager
