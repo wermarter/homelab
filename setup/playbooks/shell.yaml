@@ -43,7 +43,7 @@
     - name: Change user shell to zsh
       become: true
       ansible.builtin.user:
-        name: "werma"
+        name: "{{ ansible_facts['ansible_user_id'] }}"
         shell: /bin/zsh
 
     - name: Install Powerline10k theme
