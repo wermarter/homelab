@@ -1,6 +1,8 @@
 # run on proxmox debian host
 
-apt update && apt upgrade -y && apt install dbus-user-session && systemctl --user enable dbus --now
+apt update
+apt upgrade -y
+apt install dbus-user-session && systemctl --user enable dbus --now
 curl -Lk 'https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64' --output vscode_cli.tar.gz
 tar -xf vscode_cli.tar.gz
 rm vscode_cli.tar.gz
