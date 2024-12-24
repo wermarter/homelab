@@ -2,28 +2,25 @@ minio:
   mode: distributed
   auth:
     existingSecret: minio-credentials
-  service:
-    type: 'LoadBalancer'
-    loadBalancerIP: '192.168.1.201'
   metrics:
     serviceMonitor:
       enabled: true
       jobLabel: minio
-      namespace: prometheus-stack
+      namespace: observability
       paths:
         - /minio/v2/metrics/cluster
         - /minio/v2/metrics/node
         - /minio/v2/metrics/bucket
     prometheusRule:
       enabled: true
-      namespace: prometheus-stack
+      namespace: observability
   resourcesPreset: 'none'
   persistence:
     size: 20Gi
     storageClass: none-replicated
   extraEnvVars:
     - name: MINIO_PROMETHEUS_URL
-      value: http://prometheus-stack-prometheus.prometheus-stack.svc.cluster.local:9090
+      value: http://prometheus-stack-prometheus.observability.svc.cluster.local:9090
     - name: MINIO_PROMETHEUS_JOB_ID
       value: minio
   provisioning:
@@ -32,3 +29,4 @@ minio:
       - name: loki-chunks
       - name: loki-ruler
       - name: loki-admin
+      - name: tempo

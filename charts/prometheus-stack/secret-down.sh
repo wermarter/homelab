@@ -2,4 +2,4 @@
 
 kubectl=/snap/bin/kubectl
 
-$kubectl -n prometheus-stack delete secret grafana-credentials
+$kubectl -n observability delete secret grafana-credentials

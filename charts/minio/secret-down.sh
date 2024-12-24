@@ -2,4 +2,4 @@
 
 kubectl=/snap/bin/kubectl
 
-$kubectl -n minio delete secret minio-credentials
+$kubectl -n infra delete secret minio-credentials

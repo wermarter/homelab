@@ -7,4 +7,4 @@ version: 0.0.1
 dependencies:
   - name: minio
     repository: https://charts.bitnami.com/bitnami
-    version: 14.8.5
+    version: 14.10.3

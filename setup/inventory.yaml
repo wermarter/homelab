@@ -1,13 +1,6 @@
-localhost:
-  hosts:
-    localhost:
-
-ubuntu:
-  children:
-    workers:
-
 workers:
   hosts:
+    gintoki:
     kagura:
     shinpachi:
     sadaharu:

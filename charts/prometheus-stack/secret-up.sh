@@ -5,4 +5,4 @@ kubectl=/snap/bin/kubectl
 
 # echo -n 'admin' > admin-user
 # echo -n 'admin' > admin-password
-$kubectl -n prometheus-stack create secret generic grafana-credentials --from-file=$SCRIPT_DIR/admin-user --from-file=$SCRIPT_DIR/admin-password
+$kubectl -n observability create secret generic grafana-credentials --from-file=$SCRIPT_DIR/admin-user --from-file=$SCRIPT_DIR/admin-password
