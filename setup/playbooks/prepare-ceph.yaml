@@ -1,0 +1,165 @@
+- name: Prepare disk partitions for Rook/Ceph
+  hosts: all
+  become: true
+  vars:
+    root_partition: /dev/sda2
+    root_new_size: 28G
+    root_part_end: 30GiB
+    ceph_partition: /dev/sda3
+  
+  tasks:
+    - name: Ensure filesystem is writable
+      ansible.builtin.shell: |
+        if mount | grep -q 'on / type .* (ro,'; then
+          mount -o remount,rw /
+        fi
+      failed_when: false
+      changed_when: false
+
+    - name: Install required packages
+      ansible.builtin.apt:
+        name:
+          - parted
+          - e2fsprogs
+          - cloud-guest-utils
+        state: present
+        update_cache: true
+
+    - name: Check if ceph partition already exists
+      ansible.builtin.stat:
+        path: "{{ ceph_partition }}"
+      register: ceph_part_stat
+
+    - name: Prepare for root resize via initramfs
+      when: not ceph_part_stat.stat.exists
+      block:
+        - name: Create initramfs hook for tools
+          ansible.builtin.copy:
+            dest: /etc/initramfs-tools/hooks/resize_tools
+            mode: '0755'
+            content: |
+              #!/bin/sh
+              PREREQ=""
+              prereqs() {
+                  echo "$PREREQ"
+              }
+              case $1 in
+              prereqs)
+                  prereqs
+                  exit 0
+                  ;;
+              esac
+              . /usr/share/initramfs-tools/hook-functions
+              copy_exec /sbin/resize2fs /sbin
+              copy_exec /sbin/parted /sbin
+              copy_exec /sbin/e2fsck /sbin
+
+        - name: Create initramfs resize script
+          ansible.builtin.copy:
+            dest: /etc/initramfs-tools/scripts/local-premount/resize_root
+            mode: '0755'
+            content: |
+              #!/bin/sh
+              PREREQ=""
+              prereqs() {
+                  echo "$PREREQ"
+              }
+              case $1 in
+              prereqs)
+                  prereqs
+                  exit 0
+                  ;;
+              esac
+
+              # Wait for devices to appear
+              sleep 2
+              
+              mkdir -p /mnt_trigger
+              mount -o ro {{ root_partition }} /mnt_trigger || true
+              if [ -f /mnt_trigger/resize_root_trigger ]; then
+                  echo "RESIZE TRIGGER FOUND! Starting root partition shrink..."
+                  umount /mnt_trigger
+                  
+                  echo "Checking filesystem..."
+                  /sbin/e2fsck -f -y {{ root_partition }} || true
+                  
+                  echo "Shrinking filesystem to {{ root_new_size }}..."
+                  /sbin/resize2fs {{ root_partition }} {{ root_new_size }}
+                  
+                  echo "Resizing partition to {{ root_part_end }}..."
+                  # Use Yes to confirm shrinking a busy-looking partition (even though it's not mounted)
+                  echo "Yes" | /sbin/parted /dev/sda ---pretend-input-tty resizepart 2 {{ root_part_end }}
+                  
+                  echo "Creating Ceph partition..."
+                  echo "Yes" | /sbin/parted /dev/sda ---pretend-input-tty mkpart primary ext4 {{ root_part_end }} 100%
+                  
+                  echo "Cleanup trigger..."
+                  mount -o rw {{ root_partition }} /mnt_trigger
+                  rm -f /mnt_trigger/resize_root_trigger
+                  umount /mnt_trigger
+                  
+                  echo "Root resize complete. System will now boot normally."
+              else
+                  umount /mnt_trigger 2>/dev/null || true
+              fi
+
+        - name: Update initramfs
+          ansible.builtin.command: update-initramfs -u
+          changed_when: true
+
+        - name: Create trigger file
+          ansible.builtin.file:
+            path: /resize_root_trigger
+            state: touch
+            mode: '0644'
+
+        - name: Reboot to perform resize
+          ansible.builtin.reboot:
+            msg: "Rebooting to perform root partition shrink in initramfs"
+            reboot_timeout: 600
+
+    - name: Verify the new partition layout
+      ansible.builtin.command: lsblk
+      register: lsblk_output
+      changed_when: false
+
+    - name: Display partition layout
+      ansible.builtin.debug:
+        var: lsblk_output.stdout_lines
+
+    - name: Verify ceph partition exists and is empty
+      block:
+        - name: Check if sda3 exists
+          ansible.builtin.stat:
+            path: /dev/sda3
+          register: sda3_check
+
+        - name: Fail if sda3 doesn't exist
+          ansible.builtin.fail:
+            msg: "Expected partition /dev/sda3 not found after resize"
+          when: not sda3_check.stat.exists
+
+        - name: Check if sda3 has a filesystem
+          ansible.builtin.command: blkid /dev/sda3
+          register: blkid_check
+          failed_when: false
+          changed_when: false
+
+        - name: Confirm sda3 is empty (no filesystem)
+          ansible.builtin.debug:
+            msg: "SUCCESS: /dev/sda3 exists and has no filesystem - ready for Rook/Ceph"
+          when: blkid_check.rc != 0
+
+        - name: Cleanup initramfs modifications
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: absent
+          loop:
+            - /etc/initramfs-tools/hooks/resize_tools
+            - /etc/initramfs-tools/scripts/local-premount/resize_root
+          when: sda3_check.stat.exists
+
+        - name: Update initramfs (cleanup)
+          ansible.builtin.command: update-initramfs -u
+          when: sda3_check.stat.exists
+          changed_when: true

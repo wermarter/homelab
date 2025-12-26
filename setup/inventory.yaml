@@ -1,6 +1,5 @@
 workers:
   hosts:
-    gintoki:
     kagura:
     shinpachi:
     sadaharu:
