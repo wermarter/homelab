@@ -1,34 +1,27 @@
 ## passwordless ssh
 
-cd ~/.ssh
-
-ssh-keygen -f homelab
-
-code ./config
-
 ```
 Host gintoki
-  HostName 192.168.1.10
-  AddKeysToAgent yes
-  IdentityFile ~/.ssh/homelab
-
-Host kagura
   HostName 192.168.1.11
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
 
-Host shinpachi
+Host kagura
   HostName 192.168.1.12
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
 
-Host sadaharu
+Host shinpachi
   HostName 192.168.1.13
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/homelab
+
+Host sadaharu
+  HostName 192.168.1.14
   AddKeysToAgent yes
   IdentityFile ~/.ssh/homelab
 ```
 
-ssh-copy-id -i ~/.ssh/homelab localhost
 ssh-copy-id -i ~/.ssh/homelab kagura
 ssh-copy-id -i ~/.ssh/homelab shinpachi
 ssh-copy-id -i ~/.ssh/homelab sadaharu
@@ -37,7 +30,7 @@ ssh-copy-id -i ~/.ssh/homelab sadaharu
 
 sudo visudo
 
-add this to end-of-file: `werma ALL=(ALL) NOPASSWD: ALL`
+add this to **end-of-file**: `werma ALL=(ALL) NOPASSWD: ALL`
 
 ## install Ansible
 

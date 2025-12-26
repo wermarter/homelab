@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# crontab -e
+# */15 * * * * /root/cloudflare.sh
+
 # Forked from benkulbertis/cloudflare-update-record.sh
 # CHANGE THESE
 
