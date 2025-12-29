@@ -74,7 +74,8 @@ rook-ceph-cluster:
             name: data0
         metadataServer:
           activeCount: 1
-          activeStandby: true
+          activeStandby: false
+          # activeStandby: true
           resources:
             requests:
               cpu: "10m"

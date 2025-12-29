@@ -1,0 +1,18 @@
+mysql:
+  fullnameOverride: mysql
+  global:
+    security:
+      allowInsecureImages: true
+  image:
+    repository: bitnamilegacy/mysql
+  architecture: standalone
+  auth:
+    existingSecret: mysql-setup-secret
+  primary:
+    resourcesPreset: 'none'
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+    persistence:
+      size: 8Gi

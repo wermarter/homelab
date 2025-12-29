@@ -1,5 +1,5 @@
 ansible-playbook playbooks/prepare-k3s.yaml
-ansible-playbook playbooks/prepare-longhorn.yaml
+ansible-playbook playbooks/prepare-ceph.yaml
 
 sudo snap install kubectl --classic
 sudo snap install helm --classic
