@@ -1,0 +1,100 @@
+kube-prometheus-stack:
+  fullnameOverride: prometheus-stack
+
+  crds:
+    enabled: true
+    # issue with argoCD sync with long annotations -> set 'true' first times
+    # manual sync UI selecting only out-of-sync resources
+
+  alertmanager:
+    fullnameOverride: alertmanager
+
+  defaultRules:
+    rules:
+      kubeControllerManager: false
+      kubeSchedulerAlerting: false
+      kubeSchedulerRecording: false
+      general: false
+
+  grafana:
+    grafana.ini:
+      feature_toggles:
+        kubernetesDashboards: true
+        dashboardNewLayouts: true
+    fullnameOverride: grafana
+    replicas: 1
+    defaultDashboardsTimezone: browser
+    admin:
+      existingSecret: grafana-credentials
+      userKey: admin-user
+      passwordKey: admin-password
+    persistence:
+      enabled: true
+      size: 1Gi
+      accessModes:
+        - ReadWriteOnce
+    sidecar:
+      dashboards:
+        provider:
+          allowUiUpdates: true
+      datasources:
+        editable: true
+        # version: 2
+        timeout: 3600
+        exemplarTraceIdDestinations:
+          datasourceUid: tempo
+          traceIdLabelName: traceID
+
+  nodeExporter:
+    operatingSystems:
+      aix:
+        enabled: false
+      darwin:
+        enabled: false
+
+  kubeControllerManager:
+    enabled: false
+
+  kubeDns:
+    enabled: false
+
+  kubeEtcd:
+    enabled: false
+
+  kubeScheduler:
+    enabled: false
+
+  kubeProxy:
+    enabled: false
+
+  prometheusOperator:
+    fullnameOverride: prometheus-operator
+
+  prometheus:
+    prometheusSpec:
+      maximumStartupDurationSeconds: 120
+      replicas: 1
+      resources:
+        requests:
+          memory: 128Mi
+      scrapeInterval: 60s
+      evaluationInterval: 60s
+      retention: 14d
+      enableFeatures:
+        - exemplar-storage
+      exemplars:
+        maxSize: 1000000
+      # query:
+      #   lookbackDelta: 7d
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 50Gi
+      ruleSelectorNilUsesHelmValues: false
+      serviceMonitorSelectorNilUsesHelmValues: false
+      podMonitorSelectorNilUsesHelmValues: false
+      probeSelectorNilUsesHelmValues: false
+      enableRemoteWriteReceiver: true

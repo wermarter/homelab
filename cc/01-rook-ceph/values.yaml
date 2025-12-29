@@ -1,0 +1,101 @@
+rook-ceph:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  csi:
+    # Reduced resources for CSI sidecars and plugins
+    csiRBDProvisionerResource: |
+      - name : csi-provisioner
+        resource:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+      - name : csi-resizer
+        resource:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+      - name : csi-attacher
+        resource:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+      - name : csi-snapshotter
+        resource:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+      - name : liveness-probe
+        resource:
+          requests:
+            memory: 64Mi
+            cpu: 10m
+    csiRBDPluginResource: |
+      - name : driver-registrar
+        resource:
+          requests:
+            memory: 64Mi
+            cpu: 10m
+      - name : csi-rbdplugin
+        resource:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+      - name : liveness-probe
+        resource:
+          requests:
+            memory: 64Mi
+            cpu: 10m
+    csiCephFSProvisionerResource: |
+      - name : csi-provisioner
+        resource:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+      - name : csi-resizer
+        resource:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+      - name : csi-attacher
+        resource:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+      - name : csi-snapshotter
+        resource:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+      - name : liveness-probe
+        resource:
+          requests:
+            memory: 64Mi
+            cpu: 10m
+    csiCephFSPluginResource: |
+      - name : driver-registrar
+        resource:
+          requests:
+            memory: 64Mi
+            cpu: 10m
+      - name : csi-cephfsplugin
+        resource:
+          requests:
+            memory: 128Mi
+            cpu: 10m
+      - name : liveness-probe
+        resource:
+          requests:
+            memory: 64Mi
+            cpu: 10m
+  discover:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+  admissionController:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
