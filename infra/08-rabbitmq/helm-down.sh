@@ -1,4 +1,4 @@
 #!/bin/bash
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-helm uninstall -n observability loki
+helm uninstall -n infra rabbitmq

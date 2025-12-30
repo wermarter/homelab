@@ -1,0 +1,32 @@
+rabbitmq:
+  global:
+    security:
+      allowInsecureImages: true
+  image:
+    repository: bitnamilegacy/rabbitmq
+  clustering:
+    partitionHandling: pause_minority
+  replicaCount: 3
+  podManagementPolicy: Parallel
+  featureFlags: "khepri_db"
+  fullnameOverride: rabbitmq
+  resourcesPreset: "none"
+  auth:
+    username: werma
+    existingPasswordSecret: rabbitmq-setup-secret
+    erlangCookie: werma-456
+  communityPlugins: "https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/v4.1.0/rabbitmq_delayed_message_exchange-4.1.0.ez"
+  extraPlugins: "rabbitmq_delayed_message_exchange rabbitmq_stream"
+  startupProbe:
+    enabled: true
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      interval: 60s
+      default:
+        enabled: true
+        interval: 60s
+      perObject:
+        enabled: true
+        interval: 60s

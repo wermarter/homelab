@@ -10,36 +10,23 @@ tempo-distributed:
   server:
     grpc_server_max_recv_msg_size: 100000000
     grpc_server_max_send_msg_size: 100000000
-  # distributor:
-    # resources:
-    #   requests:
-    #     memory: 1Gi
   compactor:
     extraArgs: *extraArgs
     extraEnvFrom: *extraEnvFrom
     config:
       compaction:
-        block_retention: 720h
-    # resources:
-    #   requests:
-    #     memory: 1Gi
+        block_retention: 336h
   ingester:
-    # resources:
-    #   requests:
-    #     memory: 1Gi
     extraArgs: *extraArgs
     extraEnvFrom: *extraEnvFrom
   querier:
-    replicas: 2
+    replicas: 1
     extraArgs: *extraArgs
     extraEnvFrom: *extraEnvFrom
     config:
       frontend_worker:
         grpc_client_config:
           max_send_msg_size: 100000000
-    # resources:
-    #   requests:
-    #     memory: 2Gi
   queryFrontend:
     extraArgs: *extraArgs
     extraEnvFrom: *extraEnvFrom
@@ -52,20 +39,17 @@ tempo-distributed:
     trace:
       backend: s3
       s3:
-        bucket: tempo
-        region: ap-southeast-1
-        endpoint: minio.infra.svc.cluster.local:9000
-        access_key: ${TEMPO_MINIO_ACCESS_KEY}
-        secret_key: ${TEMPO_MINIO_SECRET_KEY}
+        bucket: tempo-bucket
+        region: us-east-1
+        endpoint: rook-ceph-rgw-ceph-objectstore.rook-ceph.svc:80
+        access_key: ${TEMPO_S3_ACCESS_KEY}
+        secret_key: ${TEMPO_S3_SECRET_KEY}
         forcepathstyle: true
         insecure: true
   metricsGenerator:
     enabled: true
     extraArgs: *extraArgs
     extraEnvFrom: *extraEnvFrom
-    # resources:
-    #   requests:
-    #     memory: 1Gi
     config:
       storage:
         remote_write:
@@ -79,12 +63,7 @@ tempo-distributed:
           - span-metrics
           - local-blocks # direct metrics from raw traces is computationally costly
         trace_id_label_name: traceID
-        # storage:
-        #   parquet_dedicated_columns:
-        #     - name: cc.step.id
-        #       type: INT32
-        #       scope: span
-#
+
 # kubectl edit configmaps tempo-config
 #query_frontend:
 # metrics:

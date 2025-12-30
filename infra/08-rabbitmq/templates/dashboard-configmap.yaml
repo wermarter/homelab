@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-grafana-dashboard
+  namespace: observability
+  labels:
+    grafana_dashboard: '1'
+data:
+  'rabbitmq-dashboard.json': |
+    {{ $.Files.Get "src/10991_rev14.json" | fromJson | toJson }}
+  'rabbitmq-raft-dashboard.json': |
+    {{ $.Files.Get "src/11340_rev7.json" | fromJson | toJson }}

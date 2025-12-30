@@ -1,0 +1,29 @@
+apiVersion: 12
+datasources:
+  - name: Tempo
+    type: tempo
+    uid: tempo
+    access: proxy
+    orgId: 1
+    url: http://tempo-query-frontend.observability.svc.cluster.local:3200
+    isDefault: true
+    readOnly: false
+    editable: true
+    version: 1
+    jsonData:
+      httpMethod: GET
+      serviceMap:
+        datasourceUid: 'prometheus'
+      tracesToMetrics:
+        datasourceUid: 'prometheus'
+      nodeGraph:
+        enabled: true
+      tracesToLogsV2:
+        datasourceUid: loki
+        customQuery: true
+        query: '{$${__tags}} | span_id = "$${__span.spanId}"'
+        filterBySpanID: true
+        filterByTraceID: true
+        spanEndTimeShift: 30m
+        spanStartTimeShift: -30m
+        tags: []

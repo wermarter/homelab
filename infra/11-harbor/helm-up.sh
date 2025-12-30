@@ -1,4 +1,4 @@
 #!/bin/bash
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-helm uninstall -n observability loki
+helm upgrade --install -n infra harbor $SCRIPT_DIR --render-subchart-notes

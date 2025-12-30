@@ -1,0 +1,26 @@
+harbor:
+  externalURL: https://harbor.haminhchien.id.vn
+  expose:
+    type: route
+    tls:
+      enabled: false
+    route:
+      hosts:
+        - harbor.haminhchien.id.vn
+      parentRefs:
+        - kind: Gateway
+          name: gateway-external
+          namespace: envoy-gateway-system
+          sectionName: http
+          group: gateway.networking.k8s.io
+  persistence:
+    persistentVolumeClaim:
+      registry:
+        size: 10Gi
+  existingSecretAdminPassword: harbor-credentials
+  trivy:
+    enabled: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
