@@ -1,0 +1,21 @@
+apiVersion: 12
+datasources:
+  - name: Loki
+    type: loki
+    uid: loki
+    access: proxy
+    orgId: 1
+    url: http://loki-read.observability.svc.cluster.local:3100
+    basicAuth: false
+    isDefault: true
+    version: 2
+    editable: true
+    jsonData:
+      maxLines: 1000
+      derivedFields:
+        - datasourceUid: tempo
+          matcherType: label
+          matcherRegex: trace_id
+          name: Trace ID
+          url: "$${__value.raw}"
+          urlDisplayLabel: "View"

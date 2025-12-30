@@ -1,0 +1,139 @@
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: lowa
+spec:
+  mode: daemonset
+  securityContext:
+    privileged: true
+    runAsUser: 0
+  volumes:
+    - name: logs
+      hostPath:
+        path: /var/log/pods
+        type: Directory
+  volumeMounts:
+    - name: logs
+      mountPath: /var/log/pods
+  resources:
+    limits:
+      cpu: 500m
+      memory: 200Mi
+  env:
+    - name: KUBE_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+  config:
+    receivers:
+      filelog:
+        include_file_name: false
+        include_file_path: true
+        include:
+          - /var/log/pods/*/*/*.log
+        operators:
+          - id: container-parser
+            type: container
+          - type: remove
+            field: attributes["log.iostream"]
+          - type: remove
+            field: attributes["log.file.path"]
+          - type: remove
+            field: attributes.logtag
+    processors:
+      batch/slow:
+        send_batch_size: 10000
+        timeout: 10s
+      memory_limiter:
+        check_interval: 5s
+        limit_percentage: 80
+        spike_limit_percentage: 25
+      k8sattributes:
+        auth_type: "serviceAccount"
+        filter:
+          node_from_env_var: KUBE_NODE_NAME
+        extract:
+          metadata:
+            - k8s.pod.uid
+            - k8s.pod.name
+            - k8s.namespace.name
+            - k8s.deployment.name
+            - k8s.daemonset.name
+            - k8s.statefulset.name
+            - k8s.cronjob.name
+            - k8s.job.name
+        pod_association:
+          # - sources:
+          #     - from: resource_attribute
+          #       name: k8s.pod.ip
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.uid
+          - sources:
+              - from: connection
+      filter/apps:
+        error_mode: ignore
+        logs:
+          log_record:
+            - 'resource.attributes["k8s.deployment.name"] != "hcdc-access-service" and resource.attributes["k8s.deployment.name"] != "browser-service"'
+      filter/infra:
+        error_mode: ignore
+        logs:
+          log_record:
+            - 'resource.attributes["k8s.deployment.name"] == "hcdc-access-service"'
+            - 'resource.attributes["k8s.deployment.name"] == "browser-service"'
+      transform/log_attribute:
+        error_mode: ignore
+        log_statements:
+          - context: log
+            statements:
+              - merge_maps(cache, ParseJSON(body), "upsert") where IsMatch(body, "^\\{")
+              - set(severity_text, cache["level"])
+              - set(trace_id.string, cache["trace_id"])
+              - set(span_id.string, cache["span_id"])
+    exporters:
+      debug:
+        verbosity: detailed
+        sampling_initial: 5
+        sampling_thereafter: 200
+      otlphttp/loki:
+        endpoint: http://loki-write.observability.svc.cluster.local:3100/otlp
+    service:
+      # telemetry:
+      #   logs:
+      #     level: debug
+      pipelines:
+        logs/apps:
+          receivers:
+            - filelog
+          processors:
+            - memory_limiter
+            - k8sattributes
+            - filter/apps
+            - transform/log_attribute
+            - batch/slow
+          exporters:
+            - otlphttp/loki
+        logs/infra:
+          receivers:
+            - filelog
+          processors:
+            - memory_limiter
+            - k8sattributes
+            - filter/infra
+            - batch/slow
+          exporters:
+            - otlphttp/loki
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: lowa-collector
+subjects:
+  - kind: ServiceAccount
+    name: lowa-collector
+    namespace: observability
+roleRef:
+  kind: ClusterRole
+  name: otel-collector
+  apiGroup: rbac.authorization.k8s.io

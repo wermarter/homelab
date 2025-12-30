@@ -8,8 +8,9 @@ mysql:
   architecture: standalone
   auth:
     existingSecret: mysql-setup-secret
+    createDatabase: false
   primary:
-    resourcesPreset: 'none'
+    resourcesPreset: "none"
     resources:
       requests:
         cpu: 10m
