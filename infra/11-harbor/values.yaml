@@ -1,5 +1,7 @@
 harbor:
   externalURL: https://harbor.haminhchien.id.vn
+  registry:
+    relativeurls: true
   expose:
     type: route
     tls:
