@@ -19,6 +19,10 @@ kube-prometheus-stack:
   grafana:
     grafana.ini:
       feature_toggles:
+        enable: true
+        # provisioning: true
+        # kubernetesClientDashboardsFolders: true
+        # grafanaAPIServerEnsureKubectlAccess: true
         kubernetesDashboards: true
         dashboardNewLayouts: true
     fullnameOverride: grafana

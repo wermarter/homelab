@@ -13,7 +13,7 @@ harbor:
         - kind: Gateway
           name: gateway-external
           namespace: envoy-gateway-system
-          sectionName: http
+          sectionName: https
           group: gateway.networking.k8s.io
   persistence:
     persistentVolumeClaim:

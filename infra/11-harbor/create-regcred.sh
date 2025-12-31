@@ -1,0 +1,1 @@
+kubectl create secret docker-registry regcred --docker-server=harbor.haminhchien.id.vn --docker-username=admin --docker-password=<your-pword>

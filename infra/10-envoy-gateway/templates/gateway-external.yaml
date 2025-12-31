@@ -44,12 +44,26 @@ apiVersion: gateway.networking.k8s.io/v1
 metadata:
   name: gateway-external
   namespace: envoy-gateway-system
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-homelab"
 spec:
   gatewayClassName: gateway-external
   listeners:
     - name: http
       protocol: HTTP
       port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "*.haminhchien.id.vn"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: "haminhchien-id-vn-tls"
+            kind: Secret
       allowedRoutes:
         namespaces:
           from: All
