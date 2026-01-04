@@ -15,6 +15,8 @@ harbor:
           namespace: envoy-gateway-system
           sectionName: https
           group: gateway.networking.k8s.io
+  updateStrategy:
+    type: Recreate
   persistence:
     persistentVolumeClaim:
       registry:

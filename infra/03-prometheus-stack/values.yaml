@@ -19,7 +19,7 @@ kube-prometheus-stack:
   grafana:
     grafana.ini:
       feature_toggles:
-        enable: true
+        # enable: true
         # provisioning: true
         # kubernetesClientDashboardsFolders: true
         # grafanaAPIServerEnsureKubectlAccess: true
@@ -76,6 +76,9 @@ kube-prometheus-stack:
 
   prometheus:
     prometheusSpec:
+      persistentVolumeClaimRetentionPolicy:
+        whenDeleted: Delete
+        whenScaled: Retain
       maximumStartupDurationSeconds: 120
       replicas: 1
       resources:
