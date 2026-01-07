@@ -23,8 +23,10 @@ rabbitmq:
   startupProbe:
     enabled: true
   metrics:
-    enabled: true
     serviceMonitor:
+      default:
+        enabled: true
+        interval: 60s
       perObject:
         enabled: true
         interval: 60s

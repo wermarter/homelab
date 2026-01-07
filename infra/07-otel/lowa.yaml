@@ -75,13 +75,12 @@ spec:
         error_mode: ignore
         logs:
           log_record:
-            - 'resource.attributes["k8s.deployment.name"] != "hcdc-access-service" and resource.attributes["k8s.deployment.name"] != "browser-service"'
+            - 'resource.attributes["k8s.namespace.name"] != "cc-apps"'
       filter/infra:
         error_mode: ignore
         logs:
           log_record:
-            - 'resource.attributes["k8s.deployment.name"] == "hcdc-access-service"'
-            - 'resource.attributes["k8s.deployment.name"] == "browser-service"'
+            - 'resource.attributes["k8s.namespace.name"] == "cc-apps"'
       transform/log_attribute:
         error_mode: ignore
         log_statements:
