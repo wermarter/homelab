@@ -7,6 +7,8 @@ metadata:
     grafana_dashboard: '1'
 data:
   'rabbitmq-dashboard.json': |
-    {{ $.Files.Get "src/10991_rev14.json" | fromJson | toJson }}
+    {{ $.Files.Get "src/10991_rev15.json" | fromJson | toJson }}
   'rabbitmq-raft-dashboard.json': |
-    {{ $.Files.Get "src/11340_rev7.json" | fromJson | toJson }}
+    {{ $.Files.Get "src/11340_rev9.json" | fromJson | toJson }}
+  'rabbitmq-stream-dashboard.json': |
+    {{ $.Files.Get "src/14798_rev11.json" | fromJson | toJson }}

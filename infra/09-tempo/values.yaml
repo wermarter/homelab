@@ -74,7 +74,7 @@ tempo-distributed:
                 attributes:
                   - key: kind
                     value: SPAN_KIND_INTERNAL
-  global_overrides:
+  overrides:
     defaults:
       metrics_generator:
         processors:

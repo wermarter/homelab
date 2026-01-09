@@ -23,6 +23,7 @@ rabbitmq:
   startupProbe:
     enabled: true
   metrics:
+    enabled: true
     serviceMonitor:
       default:
         enabled: true
